@@ -1,98 +1,335 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# GitHub Metrics Service
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Microservicio en NestJS con arquitectura hexagonal para calcular métricas de perfiles de GitHub.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Características
 
-## Description
+- ✅ **Arquitectura hexagonal** (puertos y adaptadores)
+- ✅ **Cache en memoria** con TTL de 5 minutos
+- ✅ **Manejo de errores** (404, 429, 503)
+- ✅ **Validación y sanitización** de entradas
+- ✅ **Logging** de operaciones
+- ✅ **Pruebas unitarias y E2E**
+- ✅ **Variables de entorno** configurables
+- ✅ **Documentación con Swagger** (bonus)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📋 Prerrequisitos
 
-## Project setup
+- Node.js 18+ 
+- npm o yarn
+- Cuenta de GitHub (opcional, para token de API)
+
+## 🛠️ Instalación y Setup
+
+### 1. Clonar y instalar dependencias
 
 ```bash
-$ npm install
+# Clonar el repositorio
+git clone <repository-url>
+cd github-metrics-service
+
+# Instalar dependencias
+npm install
 ```
 
-## Compile and run the project
+### 2. Configurar variables de entorno
 
 ```bash
-# development
-$ npm run start
+# Copiar el archivo de ejemplo
+cp .env.example .env
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+# Editar el archivo .env
+nano .env
 ```
 
-## Run tests
+### 3. Configuración de variables de entorno
+
+```env
+# .env
+PORT=3000
+NODE_ENV=development
+
+# GitHub API Configuration
+GITHUB_TOKEN=ghp_your_github_token_here
+USER_AGENT=GitHub-Metrics-Service
+
+# Cache Configuration
+CACHE_TTL=300
+```
+
+### 🔑 Obtención de GitHub Token (Opcional pero recomendado)
+
+1. Ve a [GitHub Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens)
+2. Haz clic en "Generate new token" → "Generate new token (classic)"
+3. Asigna un nombre (ej: "GitHub Metrics Service")
+4. **No es necesario seleccionar scopes** - la API pública funciona sin permisos
+5. Si quieres rate limits más altos, selecciona scopes públicos solamente
+6. Copia el token y agrégalo a tu `.env`
+
+**Sin token**: 60 requests por hora  
+**Con token**: 5000 requests por hora
+
+## 🏃‍♂️ Ejecución
+
+### Desarrollo
+```bash
+npm run start:dev
+```
+
+### Producción
+```bash
+npm run build
+npm run start:prod
+```
+
+### Tests
+```bash
+# Unit tests
+npm test
+
+# E2E tests
+npm run test:e2e
+
+# Test coverage
+npm run test:cov
+
+# Todos los tests
+npm run test:all
+```
+
+## 📡 Endpoints API
+
+### Health Check
+Verifica el estado del servicio.
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+curl -X GET "http://localhost:3000/api/health"
 ```
 
-## Deployment
+**Respuesta:**
+```json
+{
+  "status": "ok",
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "service": "github-metrics-service"
+}
+```
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Obtener Perfil
+Obtiene información básica del perfil de GitHub.
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+curl -X GET "http://localhost:3000/api/profile/octocat"
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+**Respuesta:**
+```json
+{
+  "username": "octocat",
+  "name": "The Octocat",
+  "avatar": "https://avatars.githubusercontent.com/u/583231?v=4",
+  "bio": "This is my bio",
+  "publicRepos": 8,
+  "followers": 3939,
+  "profileUrl": "https://github.com/octocat"
+}
+```
 
-## Resources
+### Obtener Métricas
+Calcula y retorna las métricas del perfil.
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+curl -X GET "http://localhost:3000/api/metrics/octocat"
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+**Respuesta:**
+```json
+{
+  "username": "octocat",
+  "metrics": {
+    "totalStars": 1340,
+    "followersToReposRatio": 492.38,
+    "lastPushDaysAgo": 15
+  }
+}
+```
 
-## Support
+## 🎯 Ejemplos Curl Completos
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Ejemplo 1: Perfil básico
+```bash
+curl -X GET "http://localhost:3000/api/profile/torvalds" \
+  -H "Content-Type: application/json"
+```
 
-## Stay in touch
+### Ejemplo 2: Métricas con formato bonito
+```bash
+curl -X GET "http://localhost:3000/api/metrics/torvalds" \
+  -H "Content-Type: application/json" | jq
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Ejemplo 3: Usuario inexistente
+```bash
+curl -X GET "http://localhost:3000/api/profile/usuario-inexistente-12345" \
+  -H "Content-Type: application/json"
+```
 
-## License
+**Respuesta de error:**
+```json
+{
+  "statusCode": 404,
+  "message": "GitHub user not found",
+  "error": "Not Found"
+}
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Ejemplo 4: Rate limit excedido
+```bash
+curl -X GET "http://localhost:3000/api/metrics/octocat" \
+  -H "Content-Type: application/json"
+```
+
+**Respuesta de error:**
+```json
+{
+  "statusCode": 429,
+  "message": "GitHub API rate limit exceeded",
+  "error": "Too Many Requests"
+}
+```
+
+## 🔧 Estructura del Proyecto
+
+```
+src/
+├── domain/                    # Capa de dominio
+│   ├── entities/             # Entidades de negocio
+│   └── ports/                # Interfaces/puertos
+├── application/              # Capa de aplicación
+│   └── use-cases/           # Casos de uso
+├── infrastructure/           # Capa de infraestructura
+│   ├── controllers/         # Controladores HTTP
+│   ├── adapters/            # Adaptadores concretos
+│   └── config/              # Configuración
+└── shared/                   # Utilidades compartidas
+```
+
+## 🧪 Testing
+
+### Ejecutar todos los tests
+```bash
+npm run test:all
+```
+
+### Ejecutar tests con cobertura
+```bash
+npm run test:cov
+```
+
+### Ejecutar tests E2E
+```bash
+npm run test:e2e
+```
+
+### Ejemplo de test manual
+```bash
+# Health check
+curl http://localhost:3000/api/health
+
+# Perfil existente
+curl http://localhost:3000/api/profile/octocat
+
+# Métricas
+curl http://localhost:3000/api/metrics/torvalds
+
+# Usuario inválido
+curl http://localhost:3000/api/profile/invalid-user-@#$
+```
+
+## 🐳 Docker (Bonus)
+
+### Construir la imagen
+```bash
+docker build -t github-metrics-service .
+```
+
+### Ejecutar con Docker
+```bash
+docker run -p 3000:3000 \
+  -e GITHUB_TOKEN=your_token_here \
+  -e USER_AGENT="GitHub-Metrics-Docker" \
+  github-metrics-service
+```
+
+### Docker Compose
+```bash
+docker-compose up -d
+```
+
+## 📊 Swagger Documentation (Bonus)
+
+Una vez ejecutado el servicio, accede a la documentación interactiva:
+
+```
+http://localhost:3000/api/docs
+```
+
+## 🚨 Manejo de Errores
+
+| Código | Descripción |
+|--------|-------------|
+| `200` | ✅ Success |
+| `400` | ❌ Invalid username format |
+| `404` | ❌ GitHub user not found |
+| `429` | ❌ GitHub API rate limit exceeded |
+| `503` | ❌ GitHub API service unavailable |
+| `500` | ❌ Internal server error |
+
+## 🔄 Cache
+
+El servicio incluye cache en memoria con:
+- **TTL**: 5 minutos (configurable)
+- **Estrategia**: Time-based expiration
+- **Limpieza automática** de entradas expiradas
+
+## 📈 Métricas Calculadas
+
+1. **Total Stars**: Suma de estrellas en todos los repositorios públicos
+2. **Followers/Repos Ratio**: Relación entre seguidores y repositorios (2 decimales)
+3. **Last Push Days Ago**: Días desde la última actividad en cualquier repositorio
+
+## 🤝 Contribución
+
+1. Fork el proyecto
+2. Crea una rama feature (`git checkout -b feature/AmazingFeature`)
+3. Commit cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+
+## 🆘 Troubleshooting
+
+### Error: GitHub API rate limit
+```bash
+# Verificar rate limit actual
+curl -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/rate_limit
+```
+
+### Error: Puerto en uso
+```bash
+# Cambiar puerto en .env
+PORT=3001
+```
+
+### Error: Token inválido
+```bash
+# Verificar token
+echo $GITHUB_TOKEN
+# Regenerar token en GitHub si es necesario
+```
+
+---
