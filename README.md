@@ -25,7 +25,7 @@ Microservicio en NestJS con arquitectura hexagonal para calcular métricas de pe
 
 ```bash
 # Clonar el repositorio
-git clone <repository-url>
+git clone https://github.com/Djpu94/github-api.git
 cd github-metrics-service
 
 # Instalar dependencias
@@ -83,6 +83,18 @@ npm run start:prod
 ```
 
 ### Tests
+
+```env.test
+# .env.test
+NODE_ENV=test
+
+# GitHub API
+GITHUB_API_URL=https://api.github.com
+
+# Cache Configuration
+CACHE_TTL=300
+```
+
 ```bash
 # Unit tests
 npm test
