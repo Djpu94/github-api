@@ -47,7 +47,10 @@ export class GithubAdapter implements GithubPort {
 
       return GithubProfile.create(response.data);
     } catch (error) {
-      this.handleGitHubError(error, `Failed to fetch profile for ${username}`);
+      this.handleGitHubError(
+        error,
+        `No se pudo obtener el perfil de ${username}`,
+      );
     }
   }
 
@@ -87,7 +90,7 @@ export class GithubAdapter implements GithubPort {
     } catch (error) {
       this.handleGitHubError(
         error,
-        `Failed to fetch repositories for ${username}`,
+        `No se pudieron obtener los repositorios para ${username}`,
       );
     }
   }
@@ -102,28 +105,28 @@ export class GithubAdapter implements GithubPort {
       switch (status) {
         case 404:
           throw new HttpException(
-            'GitHub user not found',
+            'Usuario de GitHub no encontrado',
             HttpStatus.NOT_FOUND,
           );
         case 403:
           if (error.response.headers['x-ratelimit-remaining'] === '0') {
             throw new HttpException(
-              'GitHub API rate limit exceeded',
+              'Límite de frecuencia de la API de GitHub excedido.',
               HttpStatus.TOO_MANY_REQUESTS,
             );
           }
           throw new HttpException(
-            'Access to GitHub API forbidden',
+            'Acceso a la API de GitHub prohibido.',
             HttpStatus.FORBIDDEN,
           );
         case 429:
           throw new HttpException(
-            'GitHub API rate limit exceeded',
+            'Límite de frecuencia de la API de GitHub excedido.',
             HttpStatus.TOO_MANY_REQUESTS,
           );
         case 503:
           throw new HttpException(
-            'GitHub API service unavailable',
+            'El servicio de API de GitHub no está disponible.',
             HttpStatus.SERVICE_UNAVAILABLE,
           );
         default:
@@ -132,7 +135,7 @@ export class GithubAdapter implements GithubPort {
     }
 
     throw new HttpException(
-      'GitHub API communication failed',
+      'La comunicación con la API de GitHub falló.',
       HttpStatus.INTERNAL_SERVER_ERROR,
     );
   }

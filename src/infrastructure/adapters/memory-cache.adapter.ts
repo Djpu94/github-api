@@ -39,19 +39,19 @@ export class MemoryCacheAdapter implements CachePort {
       return null;
     }
 
-    this.logger.debug(`Cache hit for key: ${key}`);
+    this.logger.debug(`Entrada encontrada en caché para la clave: ${key}`);
     return item.value as T;
   }
 
   setSync<T>(key: string, value: T, ttl: number = 300): void {
     const expiresAt = Date.now() + ttl * 1000;
     this.cache.set(key, { value, expiresAt });
-    this.logger.debug(`Cache set for key: ${key} with TTL: ${ttl}s`);
+    this.logger.debug(`Caché asignado a la clave: ${key} with TTL: ${ttl}s`);
   }
 
   deleteSync(key: string): void {
     this.cache.delete(key);
-    this.logger.debug(`Cache deleted for key: ${key}`);
+    this.logger.debug(`Caché borrado para la clave: ${key}`);
   }
 
   // Método para limpieza periódica
@@ -67,7 +67,7 @@ export class MemoryCacheAdapter implements CachePort {
     }
 
     if (cleaned > 0) {
-      this.logger.log(`Cleaned up ${cleaned} expired cache entries`);
+      this.logger.log(`Limpieza de ${cleaned} entradas de caché vencidas`);
     }
   }
 

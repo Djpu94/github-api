@@ -16,7 +16,9 @@ export class GetMetricsUseCase {
 
   async execute(username: string): Promise<Metrics> {
     const startTime = Date.now();
-    this.logger.log(`Starting metrics calculation for user: ${username}`);
+    this.logger.log(
+      `Cálculo de métricas iniciales para el usuario: ${username}`,
+    );
 
     try {
       const cacheKey = `metrics:${username}`;
@@ -24,7 +26,7 @@ export class GetMetricsUseCase {
       // Intentar obtener del cache
       const cached = await this.cachePort.get<Metrics>(cacheKey);
       if (cached) {
-        this.logger.log(`Cache hit for metrics: ${username}`);
+        this.logger.log(`Impacto en caché de métricas: ${username}`);
         return cached;
       }
 
@@ -42,14 +44,14 @@ export class GetMetricsUseCase {
 
       const duration = Date.now() - startTime;
       this.logger.log(
-        `Metrics calculation completed for ${username} in ${duration}ms`,
+        `Cálculo de métricas completado para ${username} en ${duration}ms`,
       );
 
       return metrics;
     } catch (error) {
       const duration = Date.now() - startTime;
       this.logger.error(
-        `Metrics calculation failed for ${username} after ${duration}ms: ${error.message}`,
+        `El cálculo de métricas falló para ${username} despues de ${duration}ms: ${error.message}`,
       );
       throw error;
     }
