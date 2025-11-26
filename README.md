@@ -2,24 +2,24 @@
 
 Microservicio en NestJS con arquitectura hexagonal para calcular métricas de perfiles de GitHub.
 
-## 🚀 Características
+## Características
 
-- ✅ **Arquitectura hexagonal** (puertos y adaptadores)
-- ✅ **Cache en memoria** con TTL de 5 minutos
-- ✅ **Manejo de errores** (404, 429, 503)
-- ✅ **Validación y sanitización** de entradas
-- ✅ **Logging** de operaciones
-- ✅ **Pruebas unitarias y E2E**
-- ✅ **Variables de entorno** configurables
-- ✅ **Documentación con Swagger** (bonus)
+- **Arquitectura hexagonal** (puertos y adaptadores)
+- **Cache en memoria** con TTL de 5 minutos
+- **Manejo de errores** (404, 429, 503)
+- **Validación y sanitización** de entradas
+- **Logging** de operaciones
+- **Pruebas unitarias y E2E**
+- **Variables de entorno** configurables
+- **Documentación con Swagger** (bonus)
 
-## 📋 Prerrequisitos
+## Prerrequisitos
 
 - Node.js 18+ 
 - npm o yarn
 - Cuenta de GitHub (opcional, para token de API)
 
-## 🛠️ Instalación y Setup
+## Instalación y Setup
 
 ### 1. Clonar y instalar dependencias
 
@@ -57,7 +57,7 @@ USER_AGENT=GitHub-Metrics-Service
 CACHE_TTL=300
 ```
 
-### 🔑 Obtención de GitHub Token (Opcional pero recomendado)
+### Obtención de GitHub Token (Opcional pero recomendado)
 
 1. Ve a [GitHub Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens)
 2. Haz clic en "Generate new token" → "Generate new token (classic)"
@@ -69,7 +69,7 @@ CACHE_TTL=300
 **Sin token**: 60 requests por hora  
 **Con token**: 5000 requests por hora
 
-## 🏃‍♂️ Ejecución
+## Ejecución
 
 ### Desarrollo
 ```bash
@@ -97,7 +97,7 @@ npm run test:cov
 npm run test:all
 ```
 
-## 📡 Endpoints API
+## Endpoints API
 
 ### Health Check
 Verifica el estado del servicio.
@@ -154,7 +154,7 @@ curl -X GET "http://localhost:3000/api/metrics/octocat"
 }
 ```
 
-## 🎯 Ejemplos Curl Completos
+## Ejemplos Curl Completos
 
 ### Ejemplo 1: Perfil básico
 ```bash
@@ -198,23 +198,7 @@ curl -X GET "http://localhost:3000/api/metrics/octocat" \
 }
 ```
 
-## 🔧 Estructura del Proyecto
-
-```
-src/
-├── domain/                    # Capa de dominio
-│   ├── entities/             # Entidades de negocio
-│   └── ports/                # Interfaces/puertos
-├── application/              # Capa de aplicación
-│   └── use-cases/           # Casos de uso
-├── infrastructure/           # Capa de infraestructura
-│   ├── controllers/         # Controladores HTTP
-│   ├── adapters/            # Adaptadores concretos
-│   └── config/              # Configuración
-└── shared/                   # Utilidades compartidas
-```
-
-## 🧪 Testing
+## Testing
 
 ### Ejecutar todos los tests
 ```bash
@@ -246,7 +230,7 @@ curl http://localhost:3000/api/metrics/torvalds
 curl http://localhost:3000/api/profile/invalid-user-@#$
 ```
 
-## 🐳 Docker (Bonus)
+## Docker (Bonus)
 
 ### Construir la imagen
 ```bash
@@ -263,7 +247,7 @@ docker-compose up -d
 docker-compose logs -f
 ```
 
-## 📊 Swagger Documentation (Bonus)
+## Swagger Documentation (Bonus)
 
 Una vez ejecutado el servicio, accede a la documentación interactiva:
 
@@ -271,25 +255,25 @@ Una vez ejecutado el servicio, accede a la documentación interactiva:
 http://localhost:3000/api/docs
 ```
 
-## 🚨 Manejo de Errores
+## Manejo de Errores
 
 | Código | Descripción |
 |--------|-------------|
-| `200` | ✅ Success |
-| `400` | ❌ Invalid username format |
-| `404` | ❌ GitHub user not found |
-| `429` | ❌ GitHub API rate limit exceeded |
-| `503` | ❌ GitHub API service unavailable |
-| `500` | ❌ Internal server error |
+| `200` | Success |
+| `400` | Invalid username format |
+| `404` | GitHub user not found |
+| `429` | GitHub API rate limit exceeded |
+| `503` | GitHub API service unavailable |
+| `500` | Internal server error |
 
-## 🔄 Cache
+## Cache
 
 El servicio incluye cache en memoria con:
 - **TTL**: 5 minutos (configurable)
 - **Estrategia**: Time-based expiration
 - **Limpieza automática** de entradas expiradas
 
-## 📈 Métricas Calculadas
+## Métricas Calculadas
 
 1. **Total Stars**: Suma de estrellas en todos los repositorios públicos
 2. **Followers/Repos Ratio**: Relación entre seguidores y repositorios (2 decimales)
