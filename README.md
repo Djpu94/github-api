@@ -218,7 +218,7 @@ src/
 
 ### Ejecutar todos los tests
 ```bash
-npm run test:all
+npm run test
 ```
 
 ### Ejecutar tests con cobertura
@@ -250,20 +250,17 @@ curl http://localhost:3000/api/profile/invalid-user-@#$
 
 ### Construir la imagen
 ```bash
-docker build -t github-metrics-service .
+docker-compose build
 ```
 
-### Ejecutar con Docker
-```bash
-docker run -p 3000:3000 \
-  -e GITHUB_TOKEN=your_token_here \
-  -e USER_AGENT="GitHub-Metrics-Docker" \
-  github-metrics-service
-```
-
-### Docker Compose
+### Ejecutar en segundo plano
 ```bash
 docker-compose up -d
+```
+
+### Ver logs
+```bash
+docker-compose logs -f
 ```
 
 ## 📊 Swagger Documentation (Bonus)
@@ -297,39 +294,5 @@ El servicio incluye cache en memoria con:
 1. **Total Stars**: Suma de estrellas en todos los repositorios públicos
 2. **Followers/Repos Ratio**: Relación entre seguidores y repositorios (2 decimales)
 3. **Last Push Days Ago**: Días desde la última actividad en cualquier repositorio
-
-## 🤝 Contribución
-
-1. Fork el proyecto
-2. Crea una rama feature (`git checkout -b feature/AmazingFeature`)
-3. Commit cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
-
-## 🆘 Troubleshooting
-
-### Error: GitHub API rate limit
-```bash
-# Verificar rate limit actual
-curl -H "Authorization: token $GITHUB_TOKEN" \
-  https://api.github.com/rate_limit
-```
-
-### Error: Puerto en uso
-```bash
-# Cambiar puerto en .env
-PORT=3001
-```
-
-### Error: Token inválido
-```bash
-# Verificar token
-echo $GITHUB_TOKEN
-# Regenerar token en GitHub si es necesario
-```
 
 ---
