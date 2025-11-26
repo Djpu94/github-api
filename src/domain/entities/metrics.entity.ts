@@ -13,10 +13,8 @@ export class Metrics {
     publicRepos: number,
     lastPushDate: Date | null,
   ): Metrics {
-    // Calcular ratio seguidores/repositorios con 1-2 decimales
     const ratio = this.calculateFollowersToReposRatio(followers, publicRepos);
 
-    // Calcular días desde última actividad
     const lastPushDaysAgo = this.calculateLastPushDaysAgo(lastPushDate);
 
     return new Metrics(username, totalStars, ratio, lastPushDaysAgo);
@@ -32,17 +30,12 @@ export class Metrics {
 
     const ratio = followers / publicRepos;
 
-    // Formatear a 1-2 decimales
-    // Si el número es entero, mostrar sin decimales
-    // Si tiene decimales, mostrar con 1 o 2 decimales según necesidad
     if (ratio % 1 === 0) {
       return ratio;
     }
 
-    // Redondear a 2 decimales, pero eliminar .00 si es entero
     const rounded = Math.round(ratio * 100) / 100;
 
-    // Si al redondear queda como entero, retornar sin decimales
     return rounded % 1 === 0 ? Math.floor(rounded) : rounded;
   }
 

@@ -23,23 +23,19 @@ export class GetMetricsUseCase {
     try {
       const cacheKey = `metrics:${username}`;
 
-      // Intentar obtener del cache
       const cached = await this.cachePort.get<Metrics>(cacheKey);
       if (cached) {
         this.logger.log(`Impacto en caché de métricas: ${username}`);
         return cached;
       }
 
-      // Obtener datos de GitHub
       const [profile, repos] = await Promise.all([
         this.githubPort.getProfile(username),
         this.githubPort.getRepositories(username),
       ]);
 
-      // Calcular métricas según especificaciones
       const metrics = this.calculateMetrics(username, profile, repos);
 
-      // Guardar en cache (TTL: 5 minutos)
       await this.cachePort.set(cacheKey, metrics, 300);
 
       const duration = Date.now() - startTime;
@@ -62,16 +58,13 @@ export class GetMetricsUseCase {
     profile: any,
     repos: any[],
   ): Metrics {
-    // 1. Total de estrellas acumuladas en repos públicos
     const totalStars = repos.reduce(
       (sum, repo) => sum + repo.stargazersCount,
       0,
     );
 
-    // 2. Encontrar la última actividad (último push)
     const lastPushDate = this.findLastPushDate(repos);
 
-    // 3. Crear métricas usando el método estático de la entidad
     return Metrics.create(
       username,
       totalStars,
@@ -92,7 +85,6 @@ export class GetMetricsUseCase {
       if (repo.pushedAt) {
         const pushDate = new Date(repo.pushedAt);
 
-        // Validar que la fecha sea válida
         if (!isNaN(pushDate.getTime())) {
           if (!latestPush || pushDate > latestPush) {
             latestPush = pushDate;

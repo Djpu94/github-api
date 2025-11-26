@@ -13,10 +13,8 @@ async function bootstrap() {
     'http://localhost:5173,http://localhost:5174,http://127.0.0.1:5173,http://localhost:3000'
   ).split(',');
 
-  // Configurar CORS
   app.enableCors({
     origin: (origin, callback) => {
-      // Permitir requests sin origen (herramientas como Postman) y orígenes en la lista
       if (!origin || allowedOrigins.includes(origin))
         return callback(null, true);
       return callback(new Error('CORS not allowed'), false);
@@ -25,7 +23,6 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // Global validation pipe
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -34,13 +31,10 @@ async function bootstrap() {
     }),
   );
 
-  // Global exception filter
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  // Global prefix
   app.setGlobalPrefix('api');
 
-  // Setup Swagger documentation
   setupSwagger(app);
 
   const port = process.env.PORT || 3000;

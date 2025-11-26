@@ -25,7 +25,6 @@ export class MemoryCacheAdapter implements CachePort {
     return Promise.resolve();
   }
 
-  // Implementaciones síncronas para uso interno
   getSync<T>(key: string): T | null {
     const item = this.cache.get(key);
 
@@ -53,7 +52,6 @@ export class MemoryCacheAdapter implements CachePort {
     this.logger.debug(`Caché borrado para la clave: ${key}`);
   }
 
-  // Método para limpieza periódica
   cleanup(): void {
     const now = Date.now();
     let cleaned = 0;

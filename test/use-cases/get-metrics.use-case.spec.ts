@@ -4,7 +4,6 @@ import { Test } from '@nestjs/testing';
 import { GetMetricsUseCase } from '../../src/application/use-cases/get-metrics.use-case';
 import { Metrics } from '../../src/domain/entities/metrics.entity';
 
-// Mock para las fechas consistentes en las pruebas
 const mockDate = new Date('2024-01-25T10:00:00Z');
 
 describe('GetMetricsUseCase', () => {
@@ -13,8 +12,8 @@ describe('GetMetricsUseCase', () => {
   let mockCachePort: any;
 
   beforeEach(async () => {
-    // Mock Date.now() para que las pruebas sean consistentes
-    jest.spyOn(Date, 'now').mockImplementation(() => mockDate.getTime());
+    jest.useFakeTimers();
+    jest.setSystemTime(mockDate);
 
     mockGithubPort = {
       getProfile: jest.fn(),
@@ -44,10 +43,11 @@ describe('GetMetricsUseCase', () => {
   });
 
   afterEach(() => {
+    jest.useRealTimers();
     jest.restoreAllMocks();
   });
 
-  describe('execute', () => {
+  describe('ejecutar', () => {
     const username = 'testuser';
     const mockProfile = {
       followers: 100,
@@ -59,7 +59,7 @@ describe('GetMetricsUseCase', () => {
       { stargazersCount: 3, pushedAt: null },
     ];
 
-    it('should return cached metrics when available', async () => {
+    it('debe retornar métricas en caché cuando están disponibles', async () => {
       const cachedMetrics = Metrics.create(
         username,
         18,
@@ -78,7 +78,7 @@ describe('GetMetricsUseCase', () => {
       expect(mockGithubPort.getRepositories).not.toHaveBeenCalled();
     });
 
-    it('should calculate metrics and cache when no cache available', async () => {
+    it('debe calcular métricas y guardar en caché cuando no hay caché disponible', async () => {
       mockCachePort.get.mockResolvedValue(null);
       mockGithubPort.getProfile.mockResolvedValue(mockProfile);
       mockGithubPort.getRepositories.mockResolvedValue(mockRepos);
@@ -95,13 +95,11 @@ describe('GetMetricsUseCase', () => {
       );
 
       expect(result.totalStars).toBe(18);
-      // followers: 100, publicRepos: 50 -> ratio = 100/50 = 2
       expect(result.followersToReposRatio).toBe(2);
-      // lastPushDate: 2024-01-20, today: 2024-01-25 -> 5 days ago
       expect(result.lastPushDaysAgo).toBe(5);
     });
 
-    it('should handle repositories without push dates', async () => {
+    it('debe manejar repositorios sin fechas de push', async () => {
       const reposWithoutPushes = [
         { stargazersCount: 10, pushedAt: null },
         { stargazersCount: 5, pushedAt: null },
@@ -117,7 +115,7 @@ describe('GetMetricsUseCase', () => {
       expect(result.totalStars).toBe(15);
     });
 
-    it('should handle empty repositories array', async () => {
+    it('debe manejar un arreglo vacío de repositorios', async () => {
       mockCachePort.get.mockResolvedValue(null);
       mockGithubPort.getProfile.mockResolvedValue(mockProfile);
       mockGithubPort.getRepositories.mockResolvedValue([]);
@@ -128,7 +126,7 @@ describe('GetMetricsUseCase', () => {
       expect(result.totalStars).toBe(0);
     });
 
-    it('should throw error when GitHub API fails', async () => {
+    it('debe lanzar un error cuando la API de GitHub falla', async () => {
       const error = new Error('GitHub API error');
       mockCachePort.get.mockResolvedValue(null);
       mockGithubPort.getProfile.mockRejectedValue(error);
@@ -137,8 +135,8 @@ describe('GetMetricsUseCase', () => {
     });
   });
 
-  describe('calculateMetrics', () => {
-    it('should correctly calculate metrics from profile and repos', () => {
+  describe('calcularMétricas', () => {
+    it('debe calcular correctamente las métricas desde el perfil y repositorios', () => {
       const username = 'testuser';
       const profile = { followers: 50, publicRepos: 10 };
       const repos = [
@@ -153,13 +151,11 @@ describe('GetMetricsUseCase', () => {
       );
 
       expect(result.totalStars).toBe(8);
-      // followers: 50, publicRepos: 10 -> ratio = 50/10 = 5
       expect(result.followersToReposRatio).toBe(5);
-      // lastPushDate: 2024-01-15, today: 2024-01-25 -> 10 days ago
       expect(result.lastPushDaysAgo).toBe(10);
     });
 
-    it('should handle ratio with decimal values', () => {
+    it('debe manejar la relación con valores decimales', () => {
       const username = 'testuser';
       const profile = { followers: 7, publicRepos: 3 };
       const repos = [{ stargazersCount: 5, pushedAt: '2024-01-15T10:00:00Z' }];
@@ -171,11 +167,10 @@ describe('GetMetricsUseCase', () => {
       );
 
       expect(result.totalStars).toBe(5);
-      // followers: 7, publicRepos: 3 -> ratio = 7/3 = 2.333... -> rounded to 2.33
       expect(result.followersToReposRatio).toBe(2.33);
     });
 
-    it('should return null ratio when no public repos', () => {
+    it('debe retornar relación nula cuando no hay repositorios públicos', () => {
       const username = 'testuser';
       const profile = { followers: 100, publicRepos: 0 };
       const repos = [{ stargazersCount: 5, pushedAt: '2024-01-15T10:00:00Z' }];
@@ -190,19 +185,19 @@ describe('GetMetricsUseCase', () => {
     });
   });
 
-  describe('findLastPushDate', () => {
-    it('should return null for empty repos array', () => {
+  describe('encontrarÚltimoPush', () => {
+    it('debe retornar nulo para un arreglo vacío de repositorios', () => {
       const result = getMetricsUseCase['findLastPushDate']([]);
       expect(result).toBeNull();
     });
 
-    it('should return null when no repos have push dates', () => {
+    it('debe retornar nulo cuando ningún repositorio tiene fechas de push', () => {
       const repos = [{ pushedAt: null }, { pushedAt: null }];
       const result = getMetricsUseCase['findLastPushDate'](repos);
       expect(result).toBeNull();
     });
 
-    it('should find the latest push date', () => {
+    it('debe encontrar la fecha de push más reciente', () => {
       const repos = [
         { pushedAt: '2024-01-10T10:00:00Z' },
         { pushedAt: '2024-01-15T10:00:00Z' },
@@ -212,7 +207,7 @@ describe('GetMetricsUseCase', () => {
       expect(result).toEqual(new Date('2024-01-15T10:00:00Z'));
     });
 
-    it('should handle invalid dates gracefully', () => {
+    it('debe manejar fechas inválidas correctamente', () => {
       const repos = [
         { pushedAt: 'invalid-date' },
         { pushedAt: '2024-01-15T10:00:00Z' },

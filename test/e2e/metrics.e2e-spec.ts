@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, NotFoundException } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { GetMetricsUseCase } from '../../src/application/use-cases/get-metrics.use-case';
@@ -26,7 +26,7 @@ describe('MetricsController (e2e)', () => {
   describe('GET /metrics/:username', () => {
     const username = 'octocat';
 
-    it('should return metrics for valid username', () => {
+    it('debe retornar métricas para un usuario válido', () => {
       const mockMetrics = {
         username,
         totalStars: 150,
@@ -53,8 +53,8 @@ describe('MetricsController (e2e)', () => {
         });
     });
 
-    it('should return 404 when user not found', () => {
-      const error = new Error('User not found');
+    it('debe retornar 404 cuando el usuario no existe', () => {
+      const error = new NotFoundException('User not found');
       jest.spyOn(getMetricsUseCase, 'execute').mockRejectedValue(error);
 
       return request(app.getHttpServer())
@@ -65,7 +65,7 @@ describe('MetricsController (e2e)', () => {
         });
     });
 
-    it('should return 500 for server errors', () => {
+    it('debe retornar 500 para errores del servidor', () => {
       const error = new Error('Internal server error');
       jest.spyOn(getMetricsUseCase, 'execute').mockRejectedValue(error);
 
@@ -77,10 +77,8 @@ describe('MetricsController (e2e)', () => {
         });
     });
 
-    it('should validate username parameter', () => {
-      return request(app.getHttpServer())
-        .get('/metrics/') // missing username
-        .expect(404);
+    it('debe validar el parámetro username', () => {
+      return request(app.getHttpServer()).get('/metrics/').expect(404);
     });
   });
 });

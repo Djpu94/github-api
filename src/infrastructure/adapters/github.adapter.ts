@@ -78,7 +78,6 @@ export class GithubAdapter implements GithubPort {
         );
         repos.push(...pageRepos);
 
-        // Si obtenemos menos repos de los solicitados, es la última página
         if (pageRepos.length < perPage) {
           break;
         }

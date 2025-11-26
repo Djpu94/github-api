@@ -13,16 +13,13 @@ export class GetProfileUseCase {
   async execute(username: string): Promise<GithubProfile> {
     const cacheKey = `profile:${username}`;
 
-    // Intentar obtener del cache
     const cached = await this.cachePort.get<GithubProfile>(cacheKey);
     if (cached) {
       return cached;
     }
 
-    // Obtener de GitHub
     const profile = await this.githubPort.getProfile(username);
 
-    // Guardar en cache (TTL: 5 minutos)
     await this.cachePort.set(cacheKey, profile, 300);
 
     return profile;
