@@ -1,4 +1,3 @@
-// test/use-cases/get-metrics.use-case.spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
 import { GetMetricsUseCase } from '../../src/application/use-cases/get-metrics.use-case';
 import { GithubPort } from '../../src/domain/ports/github.port';

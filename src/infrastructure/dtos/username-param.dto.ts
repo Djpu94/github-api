@@ -1,4 +1,3 @@
-// src/infrastructure/controllers/dto/username-param.dto.ts
 import { IsString, Matches, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 

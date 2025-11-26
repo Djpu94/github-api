@@ -1,4 +1,3 @@
-// src/infrastructure/controllers/metrics.controller.ts
 import {
   Controller,
   Get,

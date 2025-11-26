@@ -1,4 +1,3 @@
-// src/infrastructure/controllers/profile.controller.ts
 import {
   Controller,
   Get,

@@ -1,4 +1,3 @@
-// src/filters/swagger-exception.filter.ts
 import {
   ExceptionFilter,
   Catch,

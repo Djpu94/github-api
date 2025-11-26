@@ -1,4 +1,3 @@
-// src/domain/entities/metrics.entity.ts
 export class Metrics {
   constructor(
     public readonly username: string,

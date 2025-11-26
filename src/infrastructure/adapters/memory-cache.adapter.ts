@@ -12,7 +12,6 @@ export class MemoryCacheAdapter implements CachePort {
   private readonly cache = new Map<string, CacheItem<any>>();
 
   async get<T>(key: string): Promise<T | null> {
-    // Para cumplir con la interfaz async, envolvemos la operación síncrona en una promesa
     return Promise.resolve(this.getSync<T>(key));
   }
 

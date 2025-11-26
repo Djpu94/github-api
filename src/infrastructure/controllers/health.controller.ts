@@ -1,4 +1,3 @@
-// src/infrastructure/controllers/health.controller.ts
 import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { HealthResponseDto } from '../dtos/health-response.dto';

@@ -17,7 +17,6 @@ services:
     networks:
       - github-api-network
 
-  # Servicio para desarrollo
   github-api-dev:
     build:
       context: .

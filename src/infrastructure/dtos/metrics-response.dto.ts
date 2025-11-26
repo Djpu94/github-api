@@ -1,4 +1,3 @@
-// src/infrastructure/controllers/dto/metrics-response.dto.ts
 import { Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 

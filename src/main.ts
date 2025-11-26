@@ -47,11 +47,11 @@ async function bootstrap() {
   await app.listen(port);
 
   console.log(
-    `🚀 La aplicación se está ejecutando en: http://localhost:${port}/api`,
+    `La aplicación se está ejecutando en: http://localhost:${port}/api`,
   );
   console.log(
-    `📚 La documentación de la API disponible en: http://localhost:${port}/api/docs`,
+    `La documentación de la API disponible en: http://localhost:${port}/api/docs`,
   );
-  console.log(`✅ CORS habilitado para: http://localhost:5173`);
+  console.log(`CORS habilitado para: http://localhost:5173`);
 }
 bootstrap();
